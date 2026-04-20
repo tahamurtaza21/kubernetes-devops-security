@@ -32,7 +32,7 @@ pipeline {
 
       stage('Kubernetes Deployment - DEV') {
             steps {
-              withKubeConfig([credentialsId: 'kubeconfig']) {
+              withKubeConfig([credentialsId: 'jenkins-sa-token', serverUrl: 'https://192.168.79.141:6443']) {
                 sh "sed -i 's#replace#tahamur27/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
                 sh "kubectl apply -f k8s_deployment_service.yaml"
               }
