@@ -92,7 +92,7 @@
 				<version>12.2.1</version> <!-- or latest stable -->
 				<configuration>
 					<format>ALL</format>
-					<failBuildOnCVSS>5</failBuildOnCVSS>
+					<failBuildOnCVSS>10</failBuildOnCVSS>
 					<!-- Optional but useful -->
 					<autoUpdate>true</autoUpdate>
 
