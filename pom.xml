@@ -89,7 +89,7 @@
 				<version>10.0.3</version> <!-- or latest stable -->
 				<configuration>
 					<format>ALL</format>
-					<failBuildOnCVSS>8</failBuildOnCVSS>
+					<failBuildOnCVSS>5</failBuildOnCVSS>
 					<!-- Optional but useful -->
 					<autoUpdate>true</autoUpdate>
 				</configuration>
