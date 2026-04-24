@@ -12,23 +12,23 @@ pipeline {
                   steps {
                     sh "mvn test jacoco:report"
                   }
-                  post{
-                    always{
-                        junit 'target/surefire-reports/*.xml'
-                        jacoco execPattern: 'target/jacoco.exec'
-                    }
-                  }
+//                  post{
+//                    always{
+//                        junit 'target/surefire-reports/*.xml'
+//                        jacoco execPattern: 'target/jacoco.exec'
+//                    }
+//                  }
               }
 
       stage('Mutation Tests - PIT') {
             steps {
               sh "mvn org.pitest:pitest-maven:mutationCoverage"
             }
-            post{
-              always{
-                  pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
-              }
-            }
+//            post{
+//              always{
+//                  pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+//              }
+//            }
           }
 
       stage('SonarQube - SAST')
@@ -57,11 +57,11 @@ pipeline {
                   sh "mvn dependency-check:check -DnvdApiKey=$NVD_API_KEY"
               }
           }
-          post {
-              always {
-                  dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-              }
-          }
+//          post {
+//              always {
+//                  dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+//              }
+//          }
       }
 
       stage('Docker Build and Push') {
@@ -82,5 +82,23 @@ pipeline {
               }
             }
           }
+    }
+
+    post
+    {
+        always {
+            junit 'target/surefire-reports/*.xml'
+            jacoco execPattern: 'target/jacoco.exec'
+            pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+            dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+        }
+
+        success {
+
+        }
+
+        failure {
+
+        }
     }
 }
