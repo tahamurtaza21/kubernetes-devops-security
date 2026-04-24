@@ -92,6 +92,7 @@
 					<failBuildOnCVSS>8</failBuildOnCVSS>
 					<!-- Optional but useful -->
 					<autoUpdate>true</autoUpdate>
+
 				</configuration>
 			</plugin>
 		</plugins>
