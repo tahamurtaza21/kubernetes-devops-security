@@ -4,3 +4,6 @@ fileignoreconfig:
 - filename: Jenkinsfile
   ignore_detectors:
     - filecontent
+- filename: pom.xml
+  ignore_detectors:
+    - filecontent
