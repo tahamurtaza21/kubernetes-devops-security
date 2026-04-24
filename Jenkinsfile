@@ -51,16 +51,17 @@ pipeline {
         }
       }
 
-      stage('Vulnerability Scan - Docker')
-      {
-        steps{
-            sh "mvn dependency-check:check"
-        }
-        post{
-            always{
-                dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-            }
-        }
+      stage('Vulnerability Scan - Docker') {
+          steps {
+              withCredentials([string(credentialsId: 'NVD_API_KEY', variable: 'NVD_API_KEY')]) {
+                  sh "mvn dependency-check:check -DnvdApiKey=$NVD_API_KEY"
+              }
+          }
+          post {
+              always {
+                  dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+              }
+          }
       }
 
       stage('Docker Build and Push') {
