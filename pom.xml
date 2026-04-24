@@ -91,7 +91,7 @@
 					<format>ALL</format>
 					<failBuildOnCVSS>8</failBuildOnCVSS>
 					<!-- Optional but useful -->
-					<autoUpdate>false</autoUpdate>
+					<autoUpdate>true</autoUpdate>
 				</configuration>
 			</plugin>
 		</plugins>
