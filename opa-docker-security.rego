@@ -79,11 +79,12 @@ forbidden_users = [
 ]
 
 deny[msg] {
-    command := "user"
     users := [name | input[i].Cmd == "user"; name := input[i].Value]
-    lastuser := users[count(users)-1]
+    count(users) > 0
+    last_index := count(users) - 1
+    lastuser := users[last_index]
     contains(lower(lastuser[_]), forbidden_users[_])
-    msg = sprintf("Line %d: Last USER directive (USER %s) is forbidden", [i, lastuser])
+    msg = sprintf("Last USER directive (USER %s) is forbidden", [lastuser])
 }
 
 # Do not sudo
