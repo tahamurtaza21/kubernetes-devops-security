@@ -65,20 +65,21 @@ pipeline {
 //      }
 
       stage('Vulnerability Scan - Docker') {
-            steps {
+          steps {
               parallel(
-                withCredentials([string(credentialsId: 'NVD_API_KEY', variable: 'NVD_API_KEY')]) {
-                                  sh "mvn dependency-check:check -DnvdApiKey=$NVD_API_KEY"
-                ,
-                "Trivy Scan": {
-                withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
-                  sh "bash trivy-docker-image-scan.sh"
-                    }
+                  "Dependency Check": {
+                      withCredentials([string(credentialsId: 'NVD_API_KEY', variable: 'NVD_API_KEY')]) {
+                          sh "mvn dependency-check:check -DnvdApiKey=$NVD_API_KEY"
+                      }
+                  },
+                  "Trivy Scan": {
+                      withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
+                          sh "bash trivy-docker-image-scan.sh"
+                      }
                   }
-                }
               )
-            }
           }
+      }
 
 
       stage('Docker Build and Push') {
