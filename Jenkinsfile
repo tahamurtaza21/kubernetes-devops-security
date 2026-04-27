@@ -93,6 +93,13 @@ pipeline {
             }
           }
 
+      stage('Vulnerability Scan - Kubernetes') {
+            steps {
+                sh "docker run --rm -v '${WORKSPACE}:/project' openpolicyagent/conftest:v0.45.0 test --policy opa-k8s-security.rego k8s_deployment_service.yaml"
+            }
+      }
+
+
       stage('Kubernetes Deployment - DEV') {
             steps {
               withKubeConfig([credentialsId: 'jenkins-sa-token', serverUrl: 'https://192.168.79.141:6443']) {
