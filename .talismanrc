@@ -7,3 +7,7 @@ fileignoreconfig:
 - filename: pom.xml
   ignore_detectors:
     - filecontent
+fileignoreconfig:
+- filename: trivy-docker-image-scan.sh
+  ignore_detectors:
+    - filecontent
