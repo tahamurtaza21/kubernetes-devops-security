@@ -5,12 +5,12 @@ echo "Scanning base image..."
 docker run --rm -v /var/lib/trivy-cache:/root/.cache/ \
   -e TRIVY_DB_REPOSITORY=ghcr.io/aquasecurity/trivy-db \
   -e TRIVY_JAVA_DB_REPOSITORY=ghcr.io/aquasecurity/trivy-java-db \
-  aquasec/trivy:latest image --exit-code 0 --severity HIGH eclipse-temurin:8-jdk-alpine
+  aquasec/trivy:latest image --exit-code 0 --severity HIGH eclipse-temurin:8-jdk
 
 docker run --rm -v /var/lib/trivy-cache:/root/.cache/ \
   -e TRIVY_DB_REPOSITORY=ghcr.io/aquasecurity/trivy-db \
   -e TRIVY_JAVA_DB_REPOSITORY=ghcr.io/aquasecurity/trivy-java-db \
-  aquasec/trivy:latest image --exit-code 1 --severity CRITICAL eclipse-temurin:8-jdk-alpine
+  aquasec/trivy:latest image --exit-code 1 --severity CRITICAL eclipse-temurin:8-jdk
 
 exit_code=$?
 echo "Exit Code : $exit_code"
