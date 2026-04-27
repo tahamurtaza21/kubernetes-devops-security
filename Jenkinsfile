@@ -73,9 +73,7 @@ pipeline {
                       }
                   },
                   "Trivy Scan": {
-                      withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
                           sh "bash trivy-docker-image-scan.sh"
-                      }
                   }
               )
           }
