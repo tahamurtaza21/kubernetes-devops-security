@@ -3,8 +3,8 @@
 dockerImageName="tahamur27/numeric-app:${GIT_COMMIT}"
 echo $dockerImageName
 
-docker run --rm -v $WORKSPACE:/root/.cache/ aquasec/trivy:0.17.2 -q image --exit-code 0 --severity HIGH --light $dockerImageName
-docker run --rm -v $WORKSPACE:/root/.cache/ aquasec/trivy:0.17.2 -q image --exit-code 1 --severity CRITICAL --light $dockerImageName
+docker run --rm -v $WORKSPACE:/root/.cache/ aquasec/trivy:latest image --exit-code 0 --severity HIGH $dockerImageName
+docker run --rm -v $WORKSPACE:/root/.cache/ aquasec/trivy:latest image --exit-code 1 --severity CRITICAL $dockerImageName
 
 exit_code=$?
 echo "Exit Code : $exit_code"
