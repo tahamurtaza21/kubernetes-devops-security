@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dockerImageName="tahamur27/numeric-app:${GIT_COMMIT}"
+dockerImageName=$(awk 'NR==1 {print $2}' Dockerfile)
 echo $dockerImageName
 
 docker run --rm -v $WORKSPACE:/root/.cache/ aquasec/trivy:latest image --exit-code 0 --severity HIGH $dockerImageName
@@ -14,4 +14,4 @@ if [[ "${exit_code}" == 1 ]]; then
     exit 1;
 else
     echo "Image scanning passed. No CRITICAL vulnerabilities found"
-fi;
+fi
