@@ -73,7 +73,10 @@ pipeline {
                       }
                   },
                   "Trivy Scan": {
-                          sh "bash trivy-docker-image-scan.sh"
+                      sh "which docker"
+                      sh "docker --version"
+                      sh "cat trivy-docker-image-scan.sh"
+                      sh "bash trivy-docker-image-scan.sh"
                   }
               )
           }
