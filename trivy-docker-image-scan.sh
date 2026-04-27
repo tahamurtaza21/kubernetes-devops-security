@@ -1,7 +1,9 @@
 #!/bin/bash
+#
+#dockerImageName=$(awk 'NR==1 {print $2}' Dockerfile)
+#echo $dockerImageName
 
-dockerImageName=$(awk 'NR==1 {print $2}' Dockerfile)
-echo $dockerImageName
+dockerImageName="eclipse-temurin:8-jdk-alpine"
 
 docker run --rm -v $WORKSPACE:/root/.cache/ aquasec/trivy:latest image --exit-code 0 --severity HIGH $dockerImageName
 docker run --rm -v $WORKSPACE:/root/.cache/ aquasec/trivy:latest image --exit-code 1 --severity CRITICAL $dockerImageName
