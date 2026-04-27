@@ -2,9 +2,9 @@
 
 echo "Scanning base image..."
 
-docker run --rm -v $WORKSPACE:/root/.cache/ aquasec/trivy:latest --exit-code 0 --severity HIGH eclipse-temurin:8-jdk-alpine
+docker run --rm -v $(pwd):/root/.cache/ aquasec/trivy:latest image --exit-code 0 --severity HIGH eclipse-temurin:8-jdk-alpine
 
-docker run --rm -v $WORKSPACE:/root/.cache/ aquasec/trivy:latest --exit-code 1 --severity CRITICAL eclipse-temurin:8-jdk-alpine
+docker run --rm -v $(pwd):/root/.cache/ aquasec/trivy:latest image --exit-code 1 --severity CRITICAL eclipse-temurin:8-jdk-alpine
 
 exit_code=$?
 echo "Exit Code : $exit_code"
