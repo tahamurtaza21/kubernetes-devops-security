@@ -150,6 +150,24 @@ pipeline {
               )
             }
           }
+
+          stage('Integration Tests - DEV') {
+                steps {
+                  script {
+                    try {
+                      withKubeConfig([credentialsId: 'jenkins-sa-token', serverUrl: 'https://192.168.79.141:6443']) {
+                        sh "bash integration-test.sh"
+                      }
+                    } catch (e) {
+                      withKubeConfig([credentialsId: 'jenkins-sa-token', serverUrl: 'https://192.168.79.141:6443']) {
+                        sh "kubectl -n default rollout undo deploy ${deploymentName}"
+                      }
+                      throw e
+                    }
+                  }
+                }
+              }
+
     }
 
     post
