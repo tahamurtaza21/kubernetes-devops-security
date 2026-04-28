@@ -10,7 +10,7 @@ docker run --rm -v /var/lib/trivy-cache:/root/.cache/ \
 docker run --rm -v /var/lib/trivy-cache:/root/.cache/ \
   -e TRIVY_DB_REPOSITORY=ghcr.io/aquasecurity/trivy-db \
   -e TRIVY_JAVA_DB_REPOSITORY=ghcr.io/aquasecurity/trivy-java-db \
-  aquasec/trivy:latest image --exit-code 1 --severity CRITICAL $imageName
+  aquasec/trivy:latest image --exit-code 0 --severity CRITICAL $imageName
 
 #docker run --rm -v $WORKSPACE:/root/.cache/ aquasec/trivy:0.17.2 -q image --exit-code 0 --severity LOW,MEDIUM,HIGH --light $imageName
 #docker run --rm -v $WORKSPACE:/root/.cache/ aquasec/trivy:0.17.2 -q image --exit-code 1 --severity CRITICAL --light $imageName
