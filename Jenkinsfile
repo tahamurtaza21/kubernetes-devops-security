@@ -53,9 +53,17 @@ pipeline {
             }
             timeout(time: 2, unit: 'MINUTES')
             {
-                script
-                {
-                    waitForQualityGate abortPipeline: true
+                script {
+                    def qg = waitForQualityGate()
+                    if (qg.status != 'OK') {
+                        echo """
+                        ==========================================
+                        Quality Gate FAILED: ${qg.status}
+                        Reason: Code coverage, bugs, or vulnerabilities exceeded threshold.
+                        ==========================================
+                        """
+                        error("Pipeline aborted: Quality Gate failed with status ${qg.status}")
+                    }
                 }
             }
         }
