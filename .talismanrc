@@ -10,3 +10,6 @@ fileignoreconfig:
 - filename: trivy-docker-image-scan.sh
   ignore_detectors:
     - filecontent
+- filename: zap.sh
+  ignore_detectors:
+      - filecontent
