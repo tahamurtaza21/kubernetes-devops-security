@@ -179,6 +179,15 @@ pipeline {
                 }
               }
 
+          stage('OWASP ZAP - DAST') {
+                steps {
+                   withKubeConfig([credentialsId: 'jenkins-sa-token', serverUrl: 'https://192.168.79.141:6443']) {
+                    sh 'bash zap.sh'
+                  }
+                }
+              }
+
+
     }
 
     post
