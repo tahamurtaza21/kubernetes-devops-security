@@ -6,8 +6,7 @@ PORT=$(kubectl -n default get svc ${serviceName} -o json | jq .spec.ports[].node
 chmod 777 "$(pwd)"
 echo $(id -u):$(id -g)
 docker run -v "$(pwd):/zap/wrk/:rw" -t ghcr.io/zaproxy/zaproxy:stable zap-api-scan.py \
-  -t $applicationURL:$PORT/v3/api-docs -f openapi -r zap_report.html
-
+  -t http://$applicationURL:$PORT/v3/api-docs -f openapi -r zap_report.html
 
 exit_code=$?
 
