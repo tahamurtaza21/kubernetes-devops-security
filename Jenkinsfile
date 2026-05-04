@@ -1,4 +1,4 @@
-@Library('slack')
+@Library('slack') _
 
 pipeline {
   agent any
@@ -200,9 +200,6 @@ pipeline {
         }
 
       }
-
-
-
 
     post
     {
