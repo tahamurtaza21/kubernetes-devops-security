@@ -193,23 +193,25 @@ pipeline {
             }
         }
 
-        stage('CIS Benchmarking') {
-            steps {
-                script {
-                    parallel(
-                            "Master": {
-                                sh "bash cis-master.sh"
-                            },
-                            "Etcd": {
-                                sh "bash cis-etcd.sh"
-                            },
-                            "Kubelet": {
-                                sh "bash cis-kubelet.sh"
-                            }
-                    )   // ← was } — parallel() is a function call, needs closing paren
-                }
-            }
-        }
+//      Not running this stage as it's executing within the Jenkins server and thus kube-bench is not found.
+
+//        stage('CIS Benchmarking') {
+//            steps {
+//                script {
+//                    parallel(
+//                            "Master": {
+//                                sh "bash cis-master.sh"
+//                            },
+//                            "Etcd": {
+//                                sh "bash cis-etcd.sh"
+//                            },
+//                            "Kubelet": {
+//                                sh "bash cis-kubelet.sh"
+//                            }
+//                    )   // ← was } — parallel() is a function call, needs closing paren
+//                }
+//            }
+//        }
 
         stage('K8S Deployment - PROD') {
             steps {
