@@ -193,25 +193,43 @@ pipeline {
             }
         }
 
-        stage('Promote to PROD?') {
+        stage('CIS Benchmarking') {
             steps {
                 script {
-                    parallel (
-                        "Master" : {
-                            sh "bash cis-master.sh"
-                        },
-                        "Etcd" : {
-                            sh "bash cis-etcd.sh"
-                        },
-                        "Kubelet" : {
-                            sh "bash cis-kubelet.sh"
-                        }
+                    parallel(
+                            "Master": {
+                                sh "bash cis-master.sh"
+                            },
+                            "Etcd": {
+                                sh "bash cis-etcd.sh"
+                            },
+                            "Kubelet": {
+                                sh "bash cis-kubelet.sh"
+                            }
                     )   // ← was } — parallel() is a function call, needs closing paren
                 }
             }
         }
 
-    }
+        stage('K8S Deployment - PROD') {
+            steps {
+                parallel(
+                        "Deployment": {
+                            withKubeConfig([credentialsId: 'jenkins-sa-token', serverUrl: 'https://192.168.79.141:6443']) {
+                                sh "sed -i 's#replace#${imageName}#g' k8s_PROD-deployment_service.yaml"
+                                sh "kubectl -n prod apply -f k8s_PROD-deployment_service.yaml"
+                            }
+                        },
+                        "Rollout Status": {
+                            withKubeConfig([credentialsId: 'jenkins-sa-token', serverUrl: 'https://192.168.79.141:6443']) {
+                                sh "bash k8s-PROD-deployment-rollout-status.sh"
+                            }
+                        }
+                )
+            }
+
+
+        }
 
 //    stages {
 //        stage('Testing Slack') {
@@ -222,16 +240,16 @@ pipeline {
 //
 //      }
 
-    post {
-        always {
-            junit 'target/surefire-reports/*.xml'
-            jacoco execPattern: 'target/jacoco.exec'
-            pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
-            dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-            publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, icon: '', keepAll: true, reportDir: 'owasp-zap-report', reportFiles: 'zap_report.html', reportName: 'OWASP ZAP HTML Report', reportTitles: 'OWASP ZAP HTML Report', useWrapperFileDirectly: true])
+        post {
+            always {
+                junit 'target/surefire-reports/*.xml'
+                jacoco execPattern: 'target/jacoco.exec'
+                pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+                dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+                publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, icon: '', keepAll: true, reportDir: 'owasp-zap-report', reportFiles: 'zap_report.html', reportName: 'OWASP ZAP HTML Report', reportTitles: 'OWASP ZAP HTML Report', useWrapperFileDirectly: true])
 
-            sendNotification currentBuild.result
-        }
+                sendNotification currentBuild.result
+            }
 
 //        success {
 //
@@ -240,5 +258,5 @@ pipeline {
 //        failure {
 //
 //        }
+        }
     }
-}
