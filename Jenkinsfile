@@ -193,20 +193,20 @@ pipeline {
             }
         }
 
-        stage('Prompte to PROD?') {
+        stage('Promote to PROD?') {
             steps {
                 script {
-                    parallel {
+                    parallel (
                         "Master" : {
                             sh "bash cis-master.sh"
-                        } ,
+                        },
                         "Etcd" : {
                             sh "bash cis-etcd.sh"
-                        } ,
+                        },
                         "Kubelet" : {
                             sh "bash cis-kubelet.sh"
                         }
-                    }
+                    )   // ← was } — parallel() is a function call, needs closing paren
                 }
             }
         }
