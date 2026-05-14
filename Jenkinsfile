@@ -293,14 +293,14 @@ pipeline {
 
     }
 
-//    stages {
-//        stage('Testing Slack') {
-//          steps {
-//            sh 'exit 0'
-//          }
-//        }
-//
-//      }
+    stages {
+        stage('Testing Slack') {
+          steps {
+            sh 'exit 1'
+          }
+        }
+
+      }
 
     post {
 //        always {
