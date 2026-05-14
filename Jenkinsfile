@@ -231,7 +231,25 @@ pipeline {
             }
         }
 
+        stage('Integration Tests - PROD') {
+            steps {
+                script {
+                    try {
+                        withKubeConfig([credentialsId: 'jenkins-sa-token', serverUrl: 'https://192.168.79.141:6443']) {
+                            sh "bash integration-test-PROD.sh"
+                        }
+                    } catch (e) {
+                        withKubeConfig([credentialsId: 'jenkins-sa-token', serverUrl: 'https://192.168.79.141:6443']) {
+                            sh "kubectl -n prod rollout undo deploy ${deploymentName}"
+                        }
+                        throw e
+                    }
+                }
+            }
         }
+
+
+    }
 
 //    stages {
 //        stage('Testing Slack') {
@@ -242,18 +260,18 @@ pipeline {
 //
 //      }
 
-        post {
-            always {
-                junit 'target/surefire-reports/*.xml'
-                jacoco execPattern: 'target/jacoco.exec'
-                // Some issue with PIT PUblisher which is why it's not reading it
+    post {
+        always {
+            junit 'target/surefire-reports/*.xml'
+            jacoco execPattern: 'target/jacoco.exec'
+            // Some issue with PIT PUblisher which is why it's not reading it
 
 //                pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
-                dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-                publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, icon: '', keepAll: true, reportDir: 'owasp-zap-report', reportFiles: 'zap_report.html', reportName: 'OWASP ZAP HTML Report', reportTitles: 'OWASP ZAP HTML Report', useWrapperFileDirectly: true])
+            dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+            publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, icon: '', keepAll: true, reportDir: 'owasp-zap-report', reportFiles: 'zap_report.html', reportName: 'OWASP ZAP HTML Report', reportTitles: 'OWASP ZAP HTML Report', useWrapperFileDirectly: true])
 
-                sendNotification currentBuild.result
-            }
+            sendNotification currentBuild.result
+        }
 
 //        success {
 //
@@ -262,5 +280,5 @@ pipeline {
 //        failure {
 //
 //        }
-        }
     }
+}
