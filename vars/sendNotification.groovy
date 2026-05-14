@@ -1,27 +1,8 @@
-//def call(String buildStatus = 'STARTED') {
-//    buildStatus = buildStatus ?: 'SUCCESS'
-//
-//    def color
-//
-//    if (buildStatus == 'SUCCESS') {
-//        color = '#47ec05'
-//    } else if (buildStatus == 'UNSTABLE') {
-//        color = '#d5ee0d'
-//    } else {
-//        color = '#ec2805'
-//    }
-//
-////    def msg = "${buildStatus}: `${env.JOB_NAME}` #${env.BUILD_NUMBER}:\n${env.BUILD_URL}"
-//
-////    slackSend(color: color, message: msg)
-//
-//
-//}
-
 def call(String buildStatus = 'STARTED') {
     buildStatus = buildStatus ?: 'SUCCESS'
 
     def color
+    def emoji
 
     if (buildStatus == 'SUCCESS') {
         color = '#47ec05'
@@ -34,11 +15,7 @@ def call(String buildStatus = 'STARTED') {
         emoji = ':hulk:'
     }
 
-// def msg = "${buildStatus}: `${env.JOB_NAME}` #${env.BUILD_NUMBER}:\n${env.BUILD_URL}"
-
-// slackSend(color: color, message: msg)
-
-    attachments = [
+    def attachments = [
             [
                     "color": color,
                     "blocks": [
@@ -105,9 +82,8 @@ def call(String buildStatus = 'STARTED') {
                                             "type": "image",
                                             "image_url": "https://raw.githubusercontent.com/sidd-harth/kubernetes-devops-security/main/slack-emojis/k8s.png",
                                             "alt_text": "Kubernetes Icon"
-                                    ],
+                                    ]
                             ],
-
                             [
                                     "type": "section",
                                     "text": [
@@ -122,7 +98,7 @@ def call(String buildStatus = 'STARTED') {
                                                     "emoji": true
                                             ],
                                             "value": "click_me_123",
-                                            "url": "${applicationURL}:32564",
+                                            "url": "http://${applicationURL}:32564",
                                             "action_id": "button-action"
                                     ]
                             ],
@@ -172,4 +148,3 @@ def call(String buildStatus = 'STARTED') {
     slackSend(iconEmoji: emoji, attachments: attachments)
 
 }
-
